@@ -1,0 +1,64 @@
+<%- include('partials_header', {title: 'Dashboard'}) %>
+
+<div class="row" style="align-items:center;justify-content:space-between">
+  <div>
+    <h2 style="margin:0">Dashboard</h2>
+    <small>Logged in as <b><%= user.email %></b></small>
+  </div>
+  <form method="post" action="/logout">
+    <button class="btn" type="submit">Logout</button>
+  </form>
+</div>
+
+<div style="margin-top:16px" class="card">
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div>
+      <b>Streamers</b><br/>
+      <small>สร้าง overlay link แล้วเอาไปใส่ TikTok LIVE Studio (Link Source)</small>
+    </div>
+    <a class="btn primary" href="/streamers/new">+ Create</a>
+  </div>
+
+  <hr/>
+
+  <% if (!streamers.length) { %>
+    <p>ยังไม่มี streamer</p>
+  <% } %>
+
+  <% streamers.forEach(s => { %>
+    <div class="card" style="margin-bottom:12px">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div style="min-width:260px">
+          <div style="display:flex;gap:10px;align-items:center">
+            <b><%= s.display_name %></b>
+            <% if (s.connected) { %>
+              <span class="badge on">LISTENING</span>
+            <% } else { %>
+              <span class="badge off">STOPPED</span>
+            <% } %>
+          </div>
+          <div><small>TikTok: @<%= s.tiktok_unique_id %></small></div>
+          <div><small>Capacity: <%= s.capacity %> | Current: <%= s.current %></small></div>
+        </div>
+
+        <div style="flex:1;min-width:280px">
+          <div><small>Overlay URL (ใส่ใน Live Studio)</small></div>
+          <div class="code"><%= baseUrl %>/overlay/<%= s.id %>?token=<%= s.overlay_token %></div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <form method="post" action="/streamers/<%= s.id %>/listen/start">
+            <button class="btn primary" type="submit">Start Listening</button>
+          </form>
+          <form method="post" action="/streamers/<%= s.id %>/listen/stop">
+            <button class="btn" type="submit">Stop</button>
+          </form>
+        </div>
+      </div>
+
+      <small>Tip: ถ้าต่อไม่ติด ลองเริ่ม LIVE ก่อน แล้วกด Start อีกครั้ง</small>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('partials_footer') %>

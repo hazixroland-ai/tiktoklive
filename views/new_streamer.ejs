@@ -1,0 +1,27 @@
+<%- include('partials_header', {title: 'Create Streamer'}) %>
+
+<div class="card">
+  <h2>Create Streamer</h2>
+  <% if (error) { %><p style="color:#fb7185"><%= error %></p><% } %>
+
+  <form method="post" action="/streamers/new">
+    <label>ชื่อที่แสดง (เช่น ช่อง A)</label>
+    <input name="display_name" required />
+
+    <label>TikTok username (ไม่ต้องใส่ @ ก็ได้)</label>
+    <input name="tiktok_unique_id" required />
+
+    <label>ความจุขวด (capacity)</label>
+    <input name="capacity" type="number" value="100" min="10" />
+
+    <div style="margin-top:12px">
+      <button class="btn primary" type="submit">Create</button>
+      <a class="btn" href="/dashboard">Back</a>
+    </div>
+  </form>
+
+  <hr/>
+  <small>หลังสร้างแล้ว ไปหน้า Dashboard เพื่อคัดลอก Overlay URL</small>
+</div>
+
+<%- include('partials_footer') %>

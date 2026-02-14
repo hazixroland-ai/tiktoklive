@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bottle Overlay</title>
+  <style>
+    body { margin:0; background: transparent; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    .wrap { position: fixed; inset: 0; pointer-events: none; }
+    .hud {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(0,0,0,0.35); color: #fff;
+      padding: 10px 12px; border-radius: 12px; font-size: 14px;
+      pointer-events: auto;
+      backdrop-filter: blur(6px);
+      min-width: 240px;
+    }
+    .bottleBox{
+      position:absolute; right:18px; bottom:18px;
+      width: 170px; height: 320px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 26px 26px 18px 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .fill{
+      position:absolute; left:0; right:0; bottom:0;
+      height: 0%;
+      background: rgba(255,255,255,0.24);
+      transition: height 220ms ease;
+    }
+    .glassShine{
+      position:absolute; inset:0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02) 35%, rgba(255,255,255,0.10));
+      opacity: .9;
+      pointer-events:none;
+    }
+    .cap{
+      position:absolute; right:18px; bottom:344px;
+      width: 170px; height: 34px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.35);
+      border:1px solid rgba(255,255,255,0.16);
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-size: 13px;
+      pointer-events: auto;
+      backdrop-filter: blur(6px);
+    }
+    .btn {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      cursor: pointer;
+      pointer-events: auto;
+      width: 100%;
+    }
+    .toast {
+      position: absolute; right: 210px; bottom: 60px;
+      color: #fff; font-size: 14px;
+      background: rgba(0,0,0,0.38);
+      padding: 10px 12px; border-radius: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: 180ms ease;
+      max-width: 340px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .drop{
+      position:absolute;
+      right: 60px;
+      bottom: 360px;
+      width: 12px; height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.75);
+      opacity: 0;
+      pointer-events:none;
+    }
+    .drop.animate{
+      opacity: 1;
+      animation: drop 520ms ease-in forwards;
+    }
+    @keyframes drop{
+      0%{ transform: translateY(0) scale(1); opacity: 1;}
+      100%{ transform: translateY(260px) scale(0.6); opacity: 0;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hud">
+      <div><b id="title">Bottle Overlay</b></div>
+      <div id="status">Status: -</div>
+      <div id="progress">0 / 100</div>
+      <button class="btn" id="useBottle">ใช้ขวด (เท/รีเซ็ต)</button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="cap" id="capLabel">ขวด</div>
+    <div class="bottleBox" id="bottleBox">
+      <div class="fill" id="fill"></div>
+      <div class="glassShine"></div>
+    </div>
+    <div class="drop" id="drop"></div>
+  </div>
+
+  <script src="/overlay.js"></script>
+</body>
+</html>
