@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard</title>
+  <style>
+    body{font-family:system-ui;margin:0;padding:28px;background:#0b1220;color:#e7eefc}
+    a{color:#8be9fd}
+    .card{max-width:900px;margin:0 auto;background:rgba(255,255,255,.06);padding:18px;border-radius:14px}
+    input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);color:#e7eefc}
+    button{padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.10);color:#e7eefc;border:0;cursor:pointer;margin-right:10px;cursor:pointer}
+    code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:8px}
+    .row{margin:10px 0}
+    .err{color:#ffb4b4}
+    .ok{color:#b8ffcf}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width: 720px){ .grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Dashboard</h2>
+    <p>ล็อกอินเป็น <b><%= user.email %></b></p>
+
+    <% if (error) { %><p class="err"><%= error %></p><% } %>
+    <% if (ok) { %><p class="ok"><%= ok %></p><% } %>
+
+    <div class="grid">
+      <div>
+        <h3>ตั้งค่าโปรไฟล์</h3>
+        <form method="post" action="/dashboard/profile">
+          <div class="row">
+            <label>Slug (ใช้ในลิงก์)</label><br/>
+            <input name="slug" value="<%= streamer ? streamer.slug : '' %>" placeholder="เช่น hazixroland" required />
+          </div>
+          <div class="row">
+            <label>TikTok Username (ไม่ต้องใส่ @)</label><br/>
+            <input name="tiktok_username" value="<%= streamer ? streamer.tiktok_username : '' %>" placeholder="เช่น hazixroland" required />
+          </div>
+          <button type="submit">บันทึก</button>
+        </form>
+
+        <% if (streamer) { %>
+          <form method="post" action="/dashboard/reset-key" style="margin-top:10px">
+            <button type="submit">Reset Overlay Key</button>
+          </form>
+        <% } %>
+      </div>
+
+      <div>
+        <h3>ลิงก์ Overlay</h3>
+        <% if (!streamer) { %>
+          <p>กรอกข้อมูลด้านซ้ายก่อน แล้วจะได้ลิงก์ overlay</p>
+        <% } else { %>
+          <p>เอา URL นี้ไปใส่ TikTok Live Studio → Browser Source</p>
+          <p><code id="url"><%= overlayUrl %></code></p>
+          <p>
+            <a href="<%= overlayUrl %>" target="_blank">เปิด Overlay</a>
+          </p>
+
+          <h3>ควบคุมการเชื่อม TikTok</h3>
+          <p>ก่อนใช้งานจริง แนะนำให้กด Start ตอนกำลัง Live</p>
+          <button onclick="start()">Start</button>
+          <button onclick="stop()">Stop</button>
+
+          <% if (enableTest) { %>
+            <h3>Test Gift</h3>
+            <p>ยิงของปลอมเข้าขวด (ไม่ต้อง Live)</p>
+            <div class="row">
+              <input id="tu" placeholder="username ผู้ส่ง" value="tester" />
+            </div>
+            <div class="row">
+              <input id="tg" placeholder="gift name" value="Rose" />
+            </div>
+            <div class="row">
+              <input id="tc" type="number" min="1" value="1" />
+            </div>
+            <button onclick="testGift()">Send Test Gift</button>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+
+    <hr style="opacity:.2;margin:16px 0">
+    <form action="/logout" method="post">
+      <button type="submit">ออกจากระบบ</button>
+    </form>
+    <p><a href="/">กลับหน้าแรก</a></p>
+  </div>
+
+  <script>
+    async function start(){
+      const r = await fetch('/api/start', { method:'POST' });
+      if(!r.ok) alert(await r.text());
+      else alert('Started');
+    }
+    async function stop(){
+      const r = await fetch('/api/stop', { method:'POST' });
+      if(!r.ok) alert(await r.text());
+      else alert('Stopped');
+    }
+    async function testGift(){
+      const payload = {
+        username: document.getElementById('tu').value || 'tester',
+        giftName: document.getElementById('tg').value || 'Rose',
+        giftCount: Number(document.getElementById('tc').value || 1)
+      };
+      const r = await fetch('/api/test-gift', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(!r.ok) alert(await r.text());
+    }
+  </script>
+</body>
+</html>

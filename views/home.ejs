@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TikTok Overlay SaaS</title>
+  <style>
+    body{font-family:system-ui;margin:0;padding:28px;background:#0b1220;color:#e7eefc}
+    a{color:#8be9fd}
+    .card{max-width:900px;margin:0 auto;background:rgba(255,255,255,.06);padding:18px 18px;border-radius:14px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.10);color:#e7eefc;text-decoration:none;margin-right:10px}
+    code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>TikTok Gift Bottle Overlay</h1>
+    <p>สมัครสมาชิก → ใส่ TikTok username → ได้ลิงก์ overlay ไปใส่ TikTok Live Studio</p>
+
+    <% if (user) { %>
+      <p>คุณล็อกอินเป็น <b><%= user.email %></b></p>
+      <a class="btn" href="/dashboard">ไป Dashboard</a>
+      <form action="/logout" method="post" style="display:inline">
+        <button class="btn" type="submit">ออกจากระบบ</button>
+      </form>
+    <% } else { %>
+      <a class="btn" href="/signup">สมัครสมาชิก</a>
+      <a class="btn" href="/login">ล็อกอิน</a>
+    <% } %>
+
+    <hr style="opacity:.2;margin:16px 0">
+    <p>ตัวอย่างลิงก์ overlay: <code><%= baseUrl %>/o/your-slug?k=your-key</code></p>
+  </div>
+</body>
+</html>

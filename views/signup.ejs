@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Signup</title>
+  <style>
+    body{font-family:system-ui;margin:0;padding:28px;background:#0b1220;color:#e7eefc}
+    .card{max-width:520px;margin:0 auto;background:rgba(255,255,255,.06);padding:18px;border-radius:14px}
+    input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);color:#e7eefc}
+    button{padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.10);color:#e7eefc;border:0;cursor:pointer}
+    a{color:#8be9fd}
+    .err{color:#ffb4b4}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>สมัครสมาชิก</h2>
+    <% if (error) { %><p class="err"><%= error %></p><% } %>
+    <form method="post" action="/signup">
+      <label>อีเมล</label><br/>
+      <input name="email" type="email" required /><br/><br/>
+      <label>รหัสผ่าน (>= 6)</label><br/>
+      <input name="password" type="password" minlength="6" required /><br/><br/>
+      <button type="submit">สมัคร</button>
+    </form>
+    <p>มีบัญชีแล้ว? <a href="/login">ล็อกอิน</a></p>
+    <p><a href="/">กลับหน้าแรก</a></p>
+  </div>
+</body>
+</html>
